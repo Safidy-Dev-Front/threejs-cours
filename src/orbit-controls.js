@@ -9,6 +9,13 @@ lumiere.position.set(5, 10, 7);
 scene.add(lumiere);
 
 const blanc = new THREE.MeshStandardMaterial({ color: 0xf2f2f2, roughness: 0.6 });
+const fabriques = [
+  () => new THREE.MeshBasicMaterial({ color: 0xf2f2f2 }),
+  () => new THREE.MeshLambertMaterial({ color: 0xf2f200 }),
+  () => new THREE.MeshStandardMaterial({ color: 0x00f2f2, roughness: 0.6 }),
+];
+let indice = 2;                 // on démarre sur le Standard d'origine
+let materiauActuel = blanc;
 
 const sol = new THREE.Mesh(
     new THREE.PlaneGeometry( 40, 40),
@@ -78,6 +85,19 @@ function redimensionner() {
 }
 redimensionner();
 new ResizeObserver(redimensionner).observe(conteneur);
+
+window.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() !== 'm') return;
+  indice = (indice + 1) % fabriques.length;
+  const nouveau = fabriques[indice]();
+
+  eolienne.traverse((objet) => {
+    if (objet.isMesh && objet.material === materiauActuel) objet.material = nouveau;
+  });
+
+  materiauActuel.dispose();     // l'ancien n'est plus utilisé : on libère le GPU
+  materiauActuel = nouveau;
+});
 
 const timer = new THREE.Timer();
 timer.connect(document);
