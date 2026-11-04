@@ -9,7 +9,7 @@ lumiere.position.set(5, 10, 7);
 scene.add(lumiere);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-// camera.position.set(6, 4, 10);
+camera.position.set(6, 4, 10);
 camera.lookAt(0, 0, 0); 
 
 const blanc = new THREE.MeshStandardMaterial({ color: 0xf2f2f2, wireframe: true});
