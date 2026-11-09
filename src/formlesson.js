@@ -2,14 +2,24 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
-// scene.background = new THREE.Color(0xbfd8ee);
+scene.background = new THREE.Color(0xbfd8ee);
 // scene.background = new THREE.Color(t);
 scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 const lumiere = new THREE.DirectionalLight(0xffffff, 2);
 lumiere.position.set(5, 10, 7);
 scene.add(lumiere);
 
-const materiau = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.6 });
+const materiau = new THREE.MeshStandardMaterial({  color: 0x2266cc,
+  roughness: 0.14,   // 0 = poli miroir, 1 = complètement mat (défaut : 1)
+  metalness: 1, });
+
+const verre = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  roughness: 0,
+  transmission: 1,   // laisse passer la lumière
+  thickness: 0.5,    // épaisseur simulée, pour la réfraction
+  ior: 1.5,          // indice de réfraction du verre
+});
 
 const profil = [];
 for (let i = 0; i <= 10; i++) {
@@ -17,7 +27,7 @@ for (let i = 0; i <= 10; i++) {
   const rayon = 0.5 + Math.sin(i * 0.5) * 0.4; // un galbe de vase
   profil.push(new THREE.Vector2(rayon, y));
 }
-const vase = new THREE.Mesh(new THREE.LatheGeometry(profil, 48), materiau);
+const vase = new THREE.Mesh(new THREE.LatheGeometry(profil, 48), verre);
 
 const facade = new THREE.Shape();
 facade.moveTo(0, 0);
