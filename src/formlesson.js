@@ -20,7 +20,13 @@ const verre = new THREE.MeshPhysicalMaterial({
   thickness: 0.5,    // épaisseur simulée, pour la réfraction
   ior: 1.5,          // indice de réfraction du verre
 });
-
+const vernis = new THREE.MeshPhysicalMaterial({
+  color: 0xaa1111,
+  metalness: 0.6,
+  roughness: 0.4,
+  clearcoat: 1,            // vernis
+  clearcoatRoughness: 0.05,
+});
 const profil = [];
 for (let i = 0; i <= 10; i++) {
   const y = i * 0.3;                          // de 0 à 3 unités de haut
@@ -39,10 +45,11 @@ facade.closePath();
 
 const maison = new THREE.Mesh(
   new THREE.ExtrudeGeometry(facade, { depth: 1.5, bevelEnabled: false }),
-  materiau
+  vernis
 );
-maison.position.y = 1.5;
-maison.rotation.x = Math.PI / 2;
+maison.position.y = 0;
+maison.position.x = -4;
+// maison.rotation.x = Math.PI / 2;
 
 scene.add(maison);
 
